@@ -2,7 +2,6 @@ import "src/styles/globals.css";
 import type { AppProps, NextWebVitalsMetric } from "next/app";
 
 export function reportWebVitals(metric: NextWebVitalsMetric) {
-  console.log(metric);
   switch (metric.name) {
     case "FCP":
       console.log(`FCP ${Math.round(metric.value * 10) / 100}`);

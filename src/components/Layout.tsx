@@ -10,8 +10,10 @@ type Title = {
 export const Layout: FC<Title> = (props) => {
   const { title = "Todo app", children } = props;
   return (
-    <div className="flex min-h-screen flex-col items-center justify-center font-mono text-gray-800 ">
-      <Head>{title}</Head>
+    <div className="flex min-h-screen flex-col items-center justify-center font-mono text-gray-800">
+      <Head>
+        <title>{title}</title>
+      </Head>
       <header></header>
       <main className="flex w-screen flex-1 flex-col items-center justify-center">
         {children}

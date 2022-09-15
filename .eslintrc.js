@@ -40,6 +40,10 @@ module.exports = {
     "react/react-in-jsx-scope": "off",
     "react/prop-types": "off",
     "import/named": "off",
+    "@typescript-eslint/no-misused-promises": [
+      "error",
+      { checksVoidReturn: false },
+    ],
     "@typescript-eslint/no-unused-vars": "off", // or "no-unused-vars"
     "unused-imports/no-unused-imports": "error",
     "unused-imports/no-unused-vars": [

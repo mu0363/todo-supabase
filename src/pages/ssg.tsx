@@ -46,7 +46,7 @@ export default SSG;
 export const getStaticProps: GetStaticProps = async () => {
   console.log("SSG invoked!!");
   const { data: tasks } = await supabase
-    .from("images")
+    .from("todos")
     .select<"*", Task>("*")
     .order<keyof Task>("created_at", { ascending: true });
   const { data: notices } = await supabase

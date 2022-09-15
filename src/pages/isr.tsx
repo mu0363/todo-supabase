@@ -2,7 +2,7 @@ import Link from "next/link";
 import { useRouter } from "next/router";
 import { Layout } from "src/components/Layout";
 import { supabase } from "src/libs/supabase";
-import type { GetServerSideProps, NextPage } from "next";
+import type { GetStaticProps, NextPage } from "next";
 import type { Notice, Task } from "src/types";
 
 type StaticProps = {
@@ -10,13 +10,13 @@ type StaticProps = {
   notices: Notice[];
 };
 
-const SSR: NextPage<StaticProps> = (props) => {
+const ISR: NextPage<StaticProps> = (props) => {
   const router = useRouter();
   const { tasks, notices } = props;
 
   return (
-    <Layout title="SSR">
-      <p className="mb-3 text-blue-500">SSR</p>
+    <Layout title="ISR">
+      <p className="mb-3 text-blue-500">ISR</p>
       <ul className="mb-3">
         {tasks.map((task) => (
           <li key={task.id}>
@@ -31,31 +31,32 @@ const SSR: NextPage<StaticProps> = (props) => {
           </li>
         ))}
       </ul>
-      <Link href="/ssg" prefetch={false}>
-        <a className="mb-3 text-xs">Link to SSG</a>
+      <Link href="/ssr" prefetch={false}>
+        <a className="mb-3 text-xs">Link to SSR</a>
       </Link>
-      <Link href="/isr" prefetch={false}>
-        <a className="mb-3 text-xs">Link to ISR</a>
-      </Link>
-      <button className="mb-3 text-xs" onClick={() => router.push("/ssg")}>
-        Route to SSG
+      <button className="mb-3 text-xs" onClick={() => router.push("/ssr")}>
+        Route to SSR
       </button>
     </Layout>
   );
 };
 
-export default SSR;
+export default ISR;
 
-export const getServerSideProps: GetServerSideProps = async () => {
-  console.log("SSR invoked!!");
+export const getStaticProps: GetStaticProps = async () => {
+  console.log("ISR invoked!!");
   const { data: tasks } = await supabase
     .from("todos")
     .select<"*", Task>("*")
     .order<keyof Task>("created_at", { ascending: true });
+
   const { data: notices } = await supabase
     .from("notices")
     .select<"*", Notice>("*")
     .order<keyof Notice>("created_at", { ascending: true });
 
-  return { props: { tasks: tasks ?? [], notices: notices ?? [] } };
+  return {
+    props: { tasks: tasks ?? [], notices: notices ?? [] },
+    revalidate: 5,
+  };
 };
